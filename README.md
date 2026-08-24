@@ -1,4 +1,4 @@
-# DCFA: Dual-view Causal Attribution for Failure Reasoning in Agentic AI Systems. *EMNLP 2026*
+# DCFA: Dual-view Causal-inspired Attribution for Failure Reasoning in LLM-based Multi-agent Systems. *EMNLP 2026*
 
 
 ## Datasets
