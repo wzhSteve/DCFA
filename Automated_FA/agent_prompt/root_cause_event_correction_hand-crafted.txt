@@ -1,0 +1,95 @@
+You are an expert in causal reasoning and log correction.
+Your task is to repair erroneous execution logs by step-wise correction, strictly guided by ground truth and causal dependency.
+
+Core Correction Logic (Must Follow):
+	•	First, enumerate and preserve all original steps in order.
+	•	Then, for each step, fill in the corrected content for that step only.
+	•	Never rewrite logs holistically or merge steps.
+	•	Each step is corrected independently, then aligned through causal propagation.
+
+⸻
+
+Input:
+
+QUESTION: “{QUESTION}”
+GROUND_TRUTH: “{GROUND_TRUTH}”
+Mistake Event Reasons: “{MISTAKE_EVENT_REASONS}”
+All Extracted Events: “{ALL_EVENTS}”
+Causal Graph: “{CAUSAL_GRAPH_JSON}”
+
+⸻
+
+Instructions:
+	1.	Identify why the task fails by examining Mistake Event Reasons only.
+Do not restate background context or unrelated steps.
+	2.	Step-wise correction rule (Mandatory):
+	•	Preserve the original step list exactly.
+	•	For each step, replace the content inside that step with its corrected version if affected.
+	•	Corrections must be propagated to causally dependent steps without altering step order or identity.
+	3.	Corrections MUST be strictly factual and grounded in GROUND_TRUTH only:
+	•	Allowed: names, entities, labels, numbers, terms, statuses.
+	•	Forbidden: explanations, reasoning, justifications, new events, new causal links.
+	4.	Keyword Normalization (Strict):
+	•	Use concise, standardized action verbs only (e.g., search, retrieve, execute, fail, return, select).
+	•	Avoid narrative phrasing, hedging words, or speculative language.
+	•	Each step description must reflect one concrete action or state.
+	5.	Length Control Rules (Hard Constraints):
+	•	If total steps > 50:
+	•	Each step’s free-text content ≤ 100 characters.
+	•	If total steps ≤ 50:
+	•	Each step’s free-text content ≤ 150 characters.
+	•	Character limits apply per step, not globally.
+	6.	Aggressive compression per step is required:
+	•	Remove all code snippets
+	•	Remove intermediate calculations
+	•	Remove verbose or narrative analysis
+	•	Remove partial outputs that do not affect the final answer
+	•	Retain only the minimal factual signal needed to preserve trace integrity
+	7.	The corrected event sequence MUST:
+	•	Keep the same number of steps
+	•	Keep the same order
+	•	Keep the same structure, fields, and format
+	•	Keep all original step and event identifiers
+	•	Allow shortened content, but no step may be removed, merged, or added
+
+⸻
+
+Strict Output Constraint (Non-Negotiable):
+	•	Return ONLY a single valid JSON object.
+	•	The JSON MUST ONLY contain the corrected version of All Extracted Events.
+	•	Output MUST contain step information only.
+	•	No analysis, reasoning, explanations, or metadata.
+	•	No text before or after the JSON.
+	•	No markdown, no code fences.
+	•	All quotation marks inside string values MUST be escaped.
+	•	Output MUST comply with the per-step character limits.
+	•	If content is too long, compress step content further, never the trace.
+
+⸻
+### **Output Format (strict):**  
+{{
+   "step_id": {{
+      "agent_name": "raw agent name",
+      "event_dict": {{
+         "event_id": "corrected version of Events with the same formate",
+      }}
+   }}
+}}
+
+### Example
+### **Example**
+{{  
+   "0": {{  
+      "agent_name": "WebSurfer",  
+      "event_dict": {{  
+         "event_0_1": "I will search for the martial arts classes near New York Stock Exchange."  
+      }}  
+   }},  
+   "1": {{  
+      "agent_name": "ComputerTerminal",  
+      "event_dict": {{  
+         "event_1_1": "exitcode: 0 (execution succeeded)"  
+      }}  
+   }}  
+}}
+    

@@ -1,0 +1,41 @@
+You are an AI assistant specialized in causal reasoning and interaction log completion.
+
+You are given a partially corrected interaction log, a question, and the identified root cause event that originally led to task failure.
+The root cause event and its directly affected events have already been corrected; all events causally upstream of the root cause are assumed to be correct and fixed.
+Your task is to complete the correction by propagating these fixes consistently through the remaining downstream events and deriving the correct final answer.
+
+Input:
+Question: {QUESTION}
+Corrected Log: {MODIFIED_LOG}
+Root Cause Event: {ROOT_CAUSE_EVENT}
+Causal Graph: {CAUSAL_GRAPH}
+
+### **Instructions:**
+1. **Causal Anchoring**
+   Identify the `Root Cause Event` in the `Corrected Log` and determine its directly affected downstream events using the `Causal Graph`.
+   Treat the root cause event and all events causally upstream of it as fixed and correct.
+
+2. **Downstream Causal Propagation**
+   Using only the corrections implied by the root cause event and its direct effects, propagate these corrections forward along the causal graph.
+   Correct any downstream events whose contents become inconsistent as a direct causal consequence.
+   Do not introduce new assumptions, reasoning steps, or events beyond what causal propagation requires.
+
+3. **Log Consistency**
+   Preserve the original structure, ordering, and style of the interaction log.
+   Only update factual content in downstream events when necessary to maintain causal consistency.
+
+4. **Answer Derivation**
+   Derive the final answer to the `Question` from the fully corrected, causally consistent event sequence.
+
+5. **Explanation**
+   Provide a concise causal explanation describing:
+   - how the root cause event originally led to the incorrect answer, and
+   - how correcting it and propagating the fix resolves the failure.
+6. **Output**
+   Output ONLY a JSON object with the fields "reason" and "answer". Do not include any extra text.
+
+Output format:
+{{
+  "reason": "<Explanation of why the root cause event caused the original error and how it is corrected（输出翻译成中文表述）>",
+  "answer": "<Correct final answer to the question based on the fully corrected event sequence>"
+}}
